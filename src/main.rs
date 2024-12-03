@@ -1,2 +1,2 @@
 use macros::days_completed;
-days_completed!(1);
+days_completed!();

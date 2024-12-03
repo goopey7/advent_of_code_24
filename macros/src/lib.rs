@@ -2,12 +2,28 @@ extern crate proc_macro;
 
 use proc_macro2::{Punct, TokenStream};
 use quote::{format_ident, quote, TokenStreamExt};
-use syn::{self, LitInt};
+
+use std::{fs, io};
+
+fn count_files_with_prefix(dir: &str, prefix: &str) -> io::Result<u8> {
+    let mut count = 0;
+
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let file_name = entry.file_name();
+        let file_name_str = file_name.to_string_lossy();
+
+        if file_name_str.starts_with(prefix) {
+            count += 1;
+        }
+    }
+
+    Ok(count)
+}
 
 #[proc_macro]
-pub fn days_completed(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    let number_of_days = syn::parse_macro_input!(input as LitInt);
-    let number_of_days: u8 = number_of_days.to_string().parse().unwrap();
+pub fn days_completed(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let number_of_days = count_files_with_prefix("src/", "day_").unwrap();
 
     let mut mod_output: TokenStream = Default::default();
     let mut vec_output: TokenStream = Default::default();
