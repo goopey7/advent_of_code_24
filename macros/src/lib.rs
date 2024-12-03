@@ -22,7 +22,7 @@ fn count_files_with_prefix(dir: &str, prefix: &str) -> io::Result<u8> {
 }
 
 #[proc_macro]
-pub fn days_completed(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn run_aoc_days(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let number_of_days = count_files_with_prefix("src/", "day_").unwrap();
 
     let mut mod_output: TokenStream = Default::default();
